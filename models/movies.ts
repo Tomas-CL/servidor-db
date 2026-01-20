@@ -4,3 +4,5 @@ import { Database } from "bun:sqlite"
     const query = db.query("SELECT * FROM movies")
     return query.all()
 }
+// -obtener peliculas por id
+// -obtener peliculas por titulo
