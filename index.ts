@@ -1,15 +1,18 @@
 import { initDB } from "./db/init";
-import { getMovies } from "./models/movies";
+import { getMovies, insertMovies } from "./models/movies";
 import express from "express"
 import type { Request, Response, NextFunction } from "express";
 
 const app = express();
 const PORT = 3000
 const db = await initDB()
+app.use(express.json())
 
 const logMiddleware = (req: Request, res: Response, next: NextFunction) => {
     console.log(req.method, req.url, new Date().toDateString())
     if (req.method === "GET") {
+        console.log(req.query)
+    }if(req.method === "POST") {
         console.log(req.query)
     }
     next()
@@ -28,6 +31,11 @@ app.get("/movies", (req: Request, res: Response) => {
     res.json(movies)
 })
 
+app.post("/movies", (req: Request, res: Response) => {
+    const { title, genres } = req.body
+    const respuesta = insertMovies(db, title, genres)
+    res.json(respuesta)
+})
 app.listen(PORT, () => {
     console.log(`Servidor funcionando en el puerto ${PORT}`)
 })
