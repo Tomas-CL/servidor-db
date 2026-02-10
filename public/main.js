@@ -21,7 +21,7 @@ function createMovie(movie) {
     
     tdID.textContent = movie.id
     tdTitle.textContent = movie.title
-    tdGenres.textContent = movie.genre.replaceAll("|",",")
+    tdGenres.textContent = movie.genres.replaceAll("|",",")
     
     tr.appendChild(tdID)
     tr.appendChild(tdTitle)
