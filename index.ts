@@ -25,8 +25,8 @@ const logMiddleware = (req: Request, res: Response, next: NextFunction) => {
 
 app.use(logMiddleware)
 
-// --------------GET /movies
-app.get("/movies",  async (req: Request, res: Response) => {
+// -------------- GET /movies
+app.get("/movies", async (req: Request, res: Response) => {
     const { title, genres } = req.query
     const filters = {
         title: typeof title === "string" ? title : undefined,
@@ -47,11 +47,23 @@ app.get("/movies",  async (req: Request, res: Response) => {
     res.json(movies)
 })
 
-app.post("/movies", (req: Request, res: Response) => {
+// -------------- POST /movies
+app.post("/movies", async (req: Request, res: Response) => {
     const { title, genres } = req.body
+
+    if (!title || !genres)
+        return res.set(400).json({ msg: "Faltan campos title o genres" })
+
     const respuesta = insertMovies(db, title, genres)
-    res.json(respuesta)
+
+    console.log("Película integrada")
+    res.status(201).json({
+        msg: `Película "${title}" agregada correctamente`,
+        movieID: respuesta.lastInsertRowid
+    })
+
 })
+
 app.listen(PORT, () => {
     console.log(`Servidor funcionando en el puerto ${PORT}`)
 })
